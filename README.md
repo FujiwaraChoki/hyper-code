@@ -23,3 +23,10 @@ npm install
 ```
 npm start
 ```
+
+# Package the app
+Use the following command in the `hyper-code` directory:
+
+```
+electron-packager . HyperCode --platform=win32 --arch=x64
+```

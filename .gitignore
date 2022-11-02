@@ -87,3 +87,8 @@ typings/
 
 # Electron-Forge
 out/
+
+# Electron-Packager
+HyperCode-win32-x64/
+HyperCode-darwin-x64/
+HyperCode-linux-x64/
