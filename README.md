@@ -6,6 +6,15 @@ too much about the backend.
 
 # How to run
 
+There are two ways to run HyperCode.
+
+## Downloading Binaries (zip)
+
+Download the zip file according to your OS and run the binary.
+Windows => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/download/Windows/HyperCode-win32-x64.zip">Download</a>
+<br />
+Linux => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/download/Linux/HyperCode-linux-x64.zip">Download</a>
+
 1. Clone the repo
 
 ```
@@ -25,6 +34,7 @@ npm start
 ```
 
 # Package the app
+
 Use the following command in the `hyper-code` directory:
 
 ```
