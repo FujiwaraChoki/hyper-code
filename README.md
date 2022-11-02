@@ -15,6 +15,11 @@ Windows => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/downloa
 <br />
 Linux => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/download/Linux/HyperCode-linux-x64.zip">Download</a>
 
+<br />
+Alternitavely,
+
+## Manually install and run
+
 1. Clone the repo
 
 ```
