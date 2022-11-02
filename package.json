@@ -2,7 +2,7 @@
   "name": "hyper-code",
   "productName": "hyper-code",
   "version": "1.0.0",
-  "description": "My Electron application description",
+  "description": "Quick text editing app written in JavaScript.",
   "main": "src/index.js",
   "scripts": {
     "start": "electron-forge start",
@@ -13,14 +13,13 @@
   },
   "keywords": [],
   "author": {
-    "name": "Sami",
-    "email": "lolipop66611@gmail.com"
+    "name": "Sami Hindi",
+    "email": "sami@samihindi.com"
   },
   "license": "MIT",
   "dependencies": {
     "electron-squirrel-startup": "^1.0.0",
-    "file-saver": "^2.0.5",
-    "formidable": "^2.0.1"
+    "file-saver": "^2.0.5"
   },
   "devDependencies": {
     "@electron-forge/cli": "^6.0.0",
