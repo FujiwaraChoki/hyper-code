@@ -15,6 +15,12 @@ const showSuccessAlert = (message) => {
   document.body.removeChild(notificationButton);
 };
 
+const clearTheme = () => {
+  document.body.classList.remove("colored");
+  document.body.classList.remove("light");
+  document.body.classList.remove("dark");
+};
+
 window.addEventListener("DOMContentLoaded", () => {
   const saveButton = document.getElementById("save-button");
   const loadButton = document.getElementById("load-button");
@@ -37,5 +43,27 @@ window.addEventListener("DOMContentLoaded", () => {
     showSuccessAlert(
       `notifier.success('Successfully loaded ${fileName}!', {title: 'Loaded successfully.'});`
     );
+  });
+
+  // Check which theme the user has selected
+  const themeDiv = document.getElementById("theme");
+  const body = document.getElementsByTagName("body")[0];
+  themeDiv.addEventListener("change", () => {
+    let theme;
+    switch(themeDiv.value) {
+      case "light":
+        theme = "light";
+        break;
+      case "dark":
+        theme = "dark";
+        break;
+      case "colored":
+        theme = "colored";
+        break;
+      default:
+        theme = "light";
+    }
+    clearTheme();
+    body.classList.add(theme);
   });
 });
