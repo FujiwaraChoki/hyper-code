@@ -49,7 +49,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const themeDiv = document.getElementById("theme");
   const body = document.getElementsByTagName("body")[0];
   themeDiv.addEventListener("change", () => {
-    let theme;
+    let theme; 
     switch(themeDiv.value) {
       case "light":
         theme = "light";
