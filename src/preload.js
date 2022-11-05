@@ -3,69 +3,102 @@
 const fileSaver = require("file-saver");
 const fs = require("fs");
 
-let LoadOrNewWasClicked = false;
-let saveWasClicked = false;
-
-const chooseFile = async () => {
-  return await window.showOpenFilePicker({ multiple: false });
-};
-
-const showSuccessAlert = (message) => {
-  const notificationButton = document.createElement("button");
-  notificationButton.style.display = "none";
-  notificationButton.setAttribute("onclick", message);
-  document.body.appendChild(notificationButton);
-  notificationButton.click();
-  document.body.removeChild(notificationButton);
-};
-
-const createNewFile = () => {
-  if (
-    !LoadOrNewWasClicked &&
-    document.querySelector("#editor-input").value === ""
-  ) {
-    saveOrLoadOrNewWasClicked = true;
-    // Set file name to "Untitled"
-    document.querySelector("#clear-button").click();
-    document.querySelector("#file-name").value = "Untitled";
-  } else {
-    alert("You have unsaved changes. Please save or discard them first.");
-  }
-};
-
-const clearTheme = () => {
-  document.body.classList.remove("colored");
-  document.body.classList.remove("light");
-  document.body.classList.remove("dark");
-};
-
 window.addEventListener("DOMContentLoaded", () => {
+  let LoadOrNewWasClicked = false;
+  let saveWasClicked = false;
+  const editorInput = document.querySelector("#editor-input");
+  const currentFileName = document.getElementById("file-name");
+  const createFileButton = document.getElementById("new-button");
   const saveButton = document.getElementById("save-button");
   const loadButton = document.getElementById("load-button");
-  const fileNameTag = document.getElementById("file-name");
+  const clearButton = document.querySelector("#clear-button");
+  const notificationButton = document.createElement("button");
+  const fileSizeP = document.getElementById("file-size");
+  const fileTypeP = document.getElementById("file-type");
+
+  const setFileInfo = (fileName) => {
+    const stats = fs.statSync(fileName);
+    const fileSizeInBytes = stats.size;
+    const fileType = fileName.split(".").pop();
+    fileSizeP.innerHTML = `Size (in Bytes): ${fileSizeInBytes}`;
+    fileTypeP.innerHTML = `Type:            ${fileType}`;
+  };
+
+  const chooseFile = async () => {
+    return await window.showOpenFilePicker({ multiple: false });
+  };
+
+  const showSuccessAlert = (message) => {
+    notificationButton.style.display = "none";
+    message = `notifier.success('${message}');`;
+    notificationButton.setAttribute("onclick", message);
+    document.body.appendChild(notificationButton);
+    notificationButton.click();
+    document.body.removeChild(notificationButton);
+  };
+
+  const showErrorAlert = (message) => {
+    notificationButton.style.display = "none";
+    message = `notifier.alert('${message}');`;
+    notificationButton.setAttribute("onclick", message);
+    document.body.appendChild(notificationButton);
+    notificationButton.click();
+    document.body.removeChild(notificationButton);
+  };
+
+  const showInfoAlert = (message) => {
+    notificationButton.style.display = "none";
+    message = `notifier.info('${message}');`;
+    notificationButton.setAttribute("onclick", message);
+    document.body.appendChild(notificationButton);
+    notificationButton.click();
+    document.body.removeChild(notificationButton);
+  };
+
+  showInfoAlert(
+    "Please make sure to load a file in a directory, where HyperCode has access to."
+  );
+
+  const createNewFile = () => {
+    if (!LoadOrNewWasClicked && editorInput.value === "") {
+      LoadOrNewWasClicked = true;
+      clearButton.click();
+      currentFileName.value = "Untitled";
+    } else {
+      showErrorAlert(
+        "You have unsaved changes. Please save or discard them first."
+      );
+    }
+  };
+
+  const clearTheme = () => {
+    document.body.classList.remove("colored");
+    document.body.classList.remove("light");
+    document.body.classList.remove("dark");
+  };
 
   saveButton.addEventListener("click", () => {
     if (!saveWasClicked) {
       saveWasClicked = true;
-      const data = document.getElementById("editor-input").value;
-      const currentFileName = fileNameTag.innerText;
+      const data = editorInput.value;
       const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
-      fileSaver.saveAs(blob, currentFileName);
+      fileSaver.saveAs(blob, currentFileName.value);
+      setFileInfo(currentFileName.value);
     } else {
-      const currentFileName = fileNameTag.value;
-      fs.readFile(currentFileName, "utf8", (err, fsData) => {
-        const data = document.getElementById("editor-input").value;
+      fs.readFile(currentFileName.value, "utf-8", (err, fsData) => {
+        const data = editorInput.value;
         if (err) {
-          alert("An error ocurred reading the file :" + err.message);
+          showErrorAlert("An error ocurred reading the file :" + err.message);
           return;
         }
         fsData = data;
         fs.writeFile(currentFileName, fsData, (err) => {
           if (err) {
-            alert("An error ocurred updating the file" + err.message);
+            showErrorAlert("An error ocurred updating the file" + err.message);
             console.log(err);
             return;
           }
+          setFileInfo(currentFileName);
           showSuccessAlert("Saved file successfully!");
         });
       });
@@ -73,16 +106,21 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   loadButton.addEventListener("click", async () => {
-    const file = await chooseFile();
-    const fileName = file[0].name;
-    const content = await file[0].getFile();
-    const text = await content.text();
-    document.getElementById("editor-input").value = text;
-    fileNameTag.innerText = fileName;
-    // Create an invisible button, when it is clicked, it will trigger the notifciation
-    showSuccessAlert(
-      `notifier.success('Successfully loaded ${fileName}!', {title: 'Loaded successfully.'});`
-    );
+    if (!LoadOrNewWasClicked) {
+      LoadOrNewWasClicked = true;
+      const file = await chooseFile();
+      const fileName = file[0].path;
+      const content = await file[0].getFile();
+      const text = await content.text();
+      editorInput.value = text;
+      currentFileName.value = fileName;
+      setFileInfo(fileName);
+      showSuccessAlert(`Successfully loaded ${fileName}!`);
+    } else {
+      showErrorAlert(
+        "You have unsaved changes. Please save or discard them first."
+      );
+    }
   });
 
   const themeElements = document.querySelectorAll(".theme");
@@ -94,14 +132,28 @@ window.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  const createFileButton = document.getElementById("new-button");
+  const fontElements = document.querySelectorAll(".font");
+  fontElements.forEach((element) => {
+    element.addEventListener("click", (event) => {
+      event.preventDefault();
+      document.body.classList.remove("ubuntu");
+      document.body.classList.remove("roboto");
+      document.body.classList.remove("cascadia-code");
+      const fontName = element.innerText.toLowerCase().replace(/\s/g, "-");
+      document.body.classList.add(fontName);
+    });
+  });
+
   createFileButton.addEventListener("click", () => {
     createNewFile();
   });
 
-  const clearButton = document.getElementById("clear-button");
   clearButton.addEventListener("click", () => {
-    document.getElementById("file-name").value = "";
-    document.getElementById("editor-input").value = "";
+    currentFileName.value = "";
+    editorInput.value = "";
+    fileSizeP.innerHTML = "Size (in Bytes): Unkown";
+    fileTypeP.innerHTML = "Type: Unkown";
+    saveWasClicked = false;
+    LoadOrNewWasClicked = false;
   });
 });

@@ -36,18 +36,10 @@
 
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-          <li class="nav-item active">
-            <a class="nav-link" href="#">HyperCode <span class="sr-only">(current)</span></a
-            >
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="#">Link</a>
-          </li>
           <li class="nav-item dropdown">
             <a
               class="nav-link dropdown-toggle"
               href="#"
-              id="navbarDropdown"
               role="button"
               data-toggle="dropdown"
               aria-haspopup="true"
@@ -60,6 +52,43 @@
               <a class="dropdown-item theme" href="#">Dark</a>
               <a class="dropdown-item theme" href="#">Colored</a>
             </div>
+          </li>
+          <!--Change font dropdown-->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              Change Font
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <a class="dropdown-item font" href="#">Roboto</a>
+              <a class="dropdown-item font" href="#">Ubuntu</a>
+              <a class="dropdown-item font" href="#">Cascadia Code</a>
+            </div>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              id="navbarDropdown2"
+              role="button"
+              data-toggle="dropdown"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              File Info
+            </a>
+            <div class="file-info dropdown-menu"  aria-labelledby="navbarDropdown2">
+              <p id="file-size" class="dropdown-item">Size (in Bytes): Unkown</p>
+              <p id="file-type" class="dropdown-item">Type: Unkown</p>
+            </div>
+
+            </a>
           </li>
       </div>
     </nav>
@@ -75,6 +104,7 @@
           rows="20"
         ></textarea>
       </div>
+
       <button id="save-button" class="btn btn-success">Save</button>
       <button id="load-button" class="btn btn-primary">Open File</button>
       <button id="new-button" class="btn btn-primary">New File</button>

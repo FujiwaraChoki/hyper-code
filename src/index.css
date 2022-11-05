@@ -1,5 +1,19 @@
 /*Import cool google font*/
 @import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
+/*Import ubuntu font*/
+@import url("https://fonts.googleapis.com/css?family=Ubuntu:300,400,500,700&display=swap");
+
+.ubuntu {
+  font-family: "Ubuntu", sans-serif;
+}
+
+.roboto {
+  font-family: "Roboto", sans-serif;
+}
+
+.cascadia-code {
+  font-family: "Cascadia Code", monospace;
+}
 
 html,
 body {
