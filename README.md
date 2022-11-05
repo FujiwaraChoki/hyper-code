@@ -11,9 +11,9 @@ There are two ways to run HyperCode.
 ## Downloading Binaries (zip)
 
 Download the zip file according to your OS and run the binary.<br />
-Windows => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/download/Windows/HyperCode-win32-x64.zip">Download</a>
+Windows => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/download/v2.0.0.0/HyperCode-win32-x64.zip">Download</a>
 <br />
-Linux => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/download/Linux/HyperCode-linux-x64.zip">Download</a>
+Linux => <a href="https://github.com/FujiwaraChoki/hyper-code/releases/download/v2.0.0.0-linux/HyperCode-linux-x64.zip">Download</a>
 
 <br />
 Alternitavely,
