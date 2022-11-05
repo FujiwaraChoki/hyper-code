@@ -40,8 +40,20 @@ npm start
 
 # Package the app
 
+Clone the app:
+
+```
+git clone https://github.com/FujiwaraChoki/hyper-code.git
+```
+
+2. Install Dependencies
+
+```
+npm install
+```
+
 Use the following command in the `hyper-code` directory:
 
 ```
-electron-packager . HyperCode --platform=win32 --arch=x64
+electron-packager . HyperCode --platform=<PLATFORM> --arch=<ARCHITECTURE> --out=dist
 ```
