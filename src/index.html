@@ -37,8 +37,7 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
-            <a class="nav-link" href="#"
-              >Home <span class="sr-only">(current)</span></a
+            <a class="nav-link" href="#">HyperCode <span class="sr-only">(current)</span></a
             >
           </li>
           <li class="nav-item">
@@ -68,7 +67,7 @@
       <h1>HyperCode</h1>
       <p class="description">A simple, lightweight, and fast text editor.</p>
       <div class="editor">
-        <p id="file-name"></p>
+        <input id="file-name" value="Untitled" />
         <textarea
           id="editor-input"
           name="editor"
@@ -79,6 +78,7 @@
       <button id="save-button" class="btn btn-success">Save</button>
       <button id="load-button" class="btn btn-primary">Open File</button>
       <button id="new-button" class="btn btn-primary">New File</button>
+      <button id="clear-button" class="btn btn-danger">Clear</button>
     </div>
     <script src="index.js"></script>
     <script

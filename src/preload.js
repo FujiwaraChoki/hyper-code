@@ -1,6 +1,10 @@
 // See the Electron documentation for details on how to use preload scripts:
 // https://www.electronjs.org/docs/latest/tutorial/process-model#preload-scripts
 const fileSaver = require("file-saver");
+const fs = require("fs");
+
+let LoadOrNewWasClicked = false;
+let saveWasClicked = false;
 
 const chooseFile = async () => {
   return await window.showOpenFilePicker({ multiple: false });
@@ -15,6 +19,20 @@ const showSuccessAlert = (message) => {
   document.body.removeChild(notificationButton);
 };
 
+const createNewFile = () => {
+  if (
+    !LoadOrNewWasClicked &&
+    document.querySelector("#editor-input").value === ""
+  ) {
+    saveOrLoadOrNewWasClicked = true;
+    // Set file name to "Untitled"
+    document.querySelector("#clear-button").click();
+    document.querySelector("#file-name").value = "Untitled";
+  } else {
+    alert("You have unsaved changes. Please save or discard them first.");
+  }
+};
+
 const clearTheme = () => {
   document.body.classList.remove("colored");
   document.body.classList.remove("light");
@@ -27,9 +45,31 @@ window.addEventListener("DOMContentLoaded", () => {
   const fileNameTag = document.getElementById("file-name");
 
   saveButton.addEventListener("click", () => {
-    const data = document.getElementById("editor-input").value;
-    const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
-    fileSaver.saveAs(blob, "data.txt");
+    if (!saveWasClicked) {
+      saveWasClicked = true;
+      const data = document.getElementById("editor-input").value;
+      const currentFileName = fileNameTag.innerText;
+      const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
+      fileSaver.saveAs(blob, currentFileName);
+    } else {
+      const currentFileName = fileNameTag.value;
+      fs.readFile(currentFileName, "utf8", (err, fsData) => {
+        const data = document.getElementById("editor-input").value;
+        if (err) {
+          alert("An error ocurred reading the file :" + err.message);
+          return;
+        }
+        fsData = data;
+        fs.writeFile(currentFileName, fsData, (err) => {
+          if (err) {
+            alert("An error ocurred updating the file" + err.message);
+            console.log(err);
+            return;
+          }
+          showSuccessAlert("Saved file successfully!");
+        });
+      });
+    }
   });
 
   loadButton.addEventListener("click", async () => {
@@ -52,5 +92,16 @@ window.addEventListener("DOMContentLoaded", () => {
       clearTheme();
       document.body.classList.add(element.innerText.toLowerCase());
     });
+  });
+
+  const createFileButton = document.getElementById("new-button");
+  createFileButton.addEventListener("click", () => {
+    createNewFile();
+  });
+
+  const clearButton = document.getElementById("clear-button");
+  clearButton.addEventListener("click", () => {
+    document.getElementById("file-name").value = "";
+    document.getElementById("editor-input").value = "";
   });
 });

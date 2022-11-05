@@ -48,10 +48,16 @@ body {
 textarea {
   resize: none;
   padding: 10px;
+  margin-top: 1%;
   border-radius: 15px;
 }
 
 input {
   padding: 10px;
-  border-radius: 20px;
+  border-radius: 10px;
+}
+
+#file-name {
+  font-size: 1.3rem;
+  font-weight: bold;
 }
