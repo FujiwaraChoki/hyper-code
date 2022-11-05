@@ -45,25 +45,12 @@ window.addEventListener("DOMContentLoaded", () => {
     );
   });
 
-  // Check which theme the user has selected
-  const themeDiv = document.getElementById("theme");
-  const body = document.getElementsByTagName("body")[0];
-  themeDiv.addEventListener("change", () => {
-    let theme; 
-    switch(themeDiv.value) {
-      case "light":
-        theme = "light";
-        break;
-      case "dark":
-        theme = "dark";
-        break;
-      case "colored":
-        theme = "colored";
-        break;
-      default:
-        theme = "light";
-    }
-    clearTheme();
-    body.classList.add(theme);
+  const themeElements = document.querySelectorAll(".theme");
+  themeElements.forEach((element) => {
+    element.addEventListener("click", (event) => {
+      event.preventDefault();
+      clearTheme();
+      document.body.classList.add(element.innerText.toLowerCase());
+    });
   });
 });

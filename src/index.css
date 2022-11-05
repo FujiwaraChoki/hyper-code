@@ -1,4 +1,5 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto&family=Ubuntu+Mono&display=swap");
+/*Import cool google font*/
+@import url("https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap");
 
 html,
 body {
@@ -8,7 +9,7 @@ body {
 }
 
 body {
-  font-family: "Ubuntu Mono", monospace;
+  font-family: "Roboto", sans-serif;
   font-size: 1.2rem;
 }
 
@@ -29,7 +30,7 @@ body {
 }
 
 .container {
-  margin-top: 5%;
+  margin-top: 3%;
 }
 
 @keyframes gradient {
