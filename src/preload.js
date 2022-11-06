@@ -6,6 +6,7 @@ const fs = require("fs");
 window.addEventListener("DOMContentLoaded", () => {
   let LoadOrNewWasClicked = false;
   let saveWasClicked = false;
+  let infoAlertWasShown = false;
   const editorInput = document.querySelector("#editor-input");
   const currentFileName = document.getElementById("file-name");
   const createFileButton = document.getElementById("new-button");
@@ -13,16 +14,10 @@ window.addEventListener("DOMContentLoaded", () => {
   const loadButton = document.getElementById("load-button");
   const clearButton = document.querySelector("#clear-button");
   const notificationButton = document.createElement("button");
-  const fileSizeP = document.getElementById("file-size");
-  const fileTypeP = document.getElementById("file-type");
-
-  const setFileInfo = (fileName) => {
-    const stats = fs.statSync(fileName);
-    const fileSizeInBytes = stats.size;
-    const fileType = fileName.split(".").pop();
-    fileSizeP.innerHTML = `Size (in Bytes): ${fileSizeInBytes}`;
-    fileTypeP.innerHTML = `Type:            ${fileType}`;
-  };
+  const saveSettingsButton = document.getElementById("save-settings-button");
+  const themeSelectElement = document.querySelector(".theme");
+  const fontSizeElement = document.querySelector("#font-size");
+  const fontFamilyElement = document.querySelector(".font-family");
 
   const chooseFile = async () => {
     return await window.showOpenFilePicker({ multiple: false });
@@ -55,10 +50,6 @@ window.addEventListener("DOMContentLoaded", () => {
     document.body.removeChild(notificationButton);
   };
 
-  showInfoAlert(
-    "Please make sure to load a file in a directory, where HyperCode has access to."
-  );
-
   const createNewFile = () => {
     if (!LoadOrNewWasClicked && editorInput.value === "") {
       LoadOrNewWasClicked = true;
@@ -73,8 +64,17 @@ window.addEventListener("DOMContentLoaded", () => {
 
   const clearTheme = () => {
     document.body.classList.remove("colored");
-    document.body.classList.remove("light");
     document.body.classList.remove("dark");
+  };
+
+  const clearFont = () => {
+    document.body.classList.remove("ubuntu");
+    document.body.classList.remove("roboto");
+    document.body.classList.remove("cascadia-code");
+  };
+
+  const clearFontSize = () => {
+    document.body.style.fontSize = "1.3rem";
   };
 
   saveButton.addEventListener("click", () => {
@@ -83,7 +83,6 @@ window.addEventListener("DOMContentLoaded", () => {
       const data = editorInput.value;
       const blob = new Blob([data], { type: "text/plain;charset=utf-8" });
       fileSaver.saveAs(blob, currentFileName.value);
-      setFileInfo(currentFileName.value);
     } else {
       fs.readFile(currentFileName.value, "utf-8", (err, fsData) => {
         const data = editorInput.value;
@@ -98,7 +97,6 @@ window.addEventListener("DOMContentLoaded", () => {
             console.log(err);
             return;
           }
-          setFileInfo(currentFileName);
           showSuccessAlert("Saved file successfully!");
         });
       });
@@ -109,12 +107,11 @@ window.addEventListener("DOMContentLoaded", () => {
     if (!LoadOrNewWasClicked) {
       LoadOrNewWasClicked = true;
       const file = await chooseFile();
-      const fileName = file[0].path;
+      const fileName = file[0].name;
       const content = await file[0].getFile();
       const text = await content.text();
       editorInput.value = text;
       currentFileName.value = fileName;
-      setFileInfo(fileName);
       showSuccessAlert(`Successfully loaded ${fileName}!`);
     } else {
       showErrorAlert(
@@ -123,25 +120,21 @@ window.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  const themeElements = document.querySelectorAll(".theme");
-  themeElements.forEach((element) => {
-    element.addEventListener("click", (event) => {
-      event.preventDefault();
-      clearTheme();
-      document.body.classList.add(element.innerText.toLowerCase());
-    });
-  });
-
-  const fontElements = document.querySelectorAll(".font");
-  fontElements.forEach((element) => {
-    element.addEventListener("click", (event) => {
-      event.preventDefault();
-      document.body.classList.remove("ubuntu");
-      document.body.classList.remove("roboto");
-      document.body.classList.remove("cascadia-code");
-      const fontName = element.innerText.toLowerCase().replace(/\s/g, "-");
-      document.body.classList.add(fontName);
-    });
+  saveSettingsButton.addEventListener("click", (event) => {
+    event.preventDefault();
+    clearTheme();
+    clearFont();
+    clearFontSize();
+    const theme = themeSelectElement.value;
+    const font = fontFamilyElement.value;
+    const fontSize = fontSizeElement.value;
+    document.body.classList.add(theme);
+    document.body.classList.add(font);
+    if (parseFloat(fontSize) > 30) {
+      showErrorAlert("Please choose a font size smaller than 1.3rem");
+    }
+    document.body.style.fontSize = fontSize + "px";
+    showSuccessAlert("Successfully saved settings!");
   });
 
   createFileButton.addEventListener("click", () => {
@@ -151,9 +144,18 @@ window.addEventListener("DOMContentLoaded", () => {
   clearButton.addEventListener("click", () => {
     currentFileName.value = "";
     editorInput.value = "";
-    fileSizeP.innerHTML = "Size (in Bytes): Unkown";
-    fileTypeP.innerHTML = "Type: Unkown";
     saveWasClicked = false;
     LoadOrNewWasClicked = false;
   });
+
+  window.onload = () => {
+    if (infoAlertWasShown === false) {
+      infoAlertWasShown = true;
+      showInfoAlert(
+        "Please make sure to load a file in a directory, where HyperCode has access to."
+      );
+    } else {
+      return;
+    }
+  };
 });
