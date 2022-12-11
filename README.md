@@ -40,7 +40,7 @@ npm start
 
 # Package the app
 
-Clone the app:
+1. Clone the app:
 
 ```
 git clone https://github.com/FujiwaraChoki/hyper-code.git
@@ -52,7 +52,7 @@ git clone https://github.com/FujiwaraChoki/hyper-code.git
 npm install
 ```
 
-Use the following command in the `hyper-code` directory:
+3. Use the following command in the `hyper-code` directory:
 
 ```
 electron-packager . HyperCode --platform=<PLATFORM> --arch=<ARCHITECTURE> --out=dist
